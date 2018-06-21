@@ -9,4 +9,6 @@
 
     <string name="up">Up</string>
 
+    <string name="error_network">Not online, not refreshing.</string>
+    <string name="error_update">Error updating content.</string>
 </resources>

@@ -11,4 +11,6 @@
 
     <string name="error_network">Not online, not refreshing.</string>
     <string name="error_update">Error updating content.</string>
+
+    <string name="article_published_author">%s by %s</string>
 </resources>

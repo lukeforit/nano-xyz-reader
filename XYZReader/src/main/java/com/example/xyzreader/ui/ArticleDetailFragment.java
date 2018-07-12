@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.graphics.Palette;
-import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -36,10 +35,8 @@ import java.util.GregorianCalendar;
  */
 public class ArticleDetailFragment extends android.support.v4.app.Fragment implements
         android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor> {
-    private static final String TAG = "ArticleDetailFragment";
-
     public static final String ARG_ITEM_ID = "item_id";
-
+    private static final String TAG = "ArticleDetailFragment";
     private Cursor mCursor;
     private long mItemId;
     private View mRootView;
@@ -56,7 +53,7 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
     // Use default locale format
     private SimpleDateFormat outputFormat = new SimpleDateFormat();
     // Most time functions can only handle 1902 - 2037
-    private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
+    private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2, 1, 1);
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -73,10 +70,23 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
         return fragment;
     }
 
+    static float progress(float v, float min, float max) {
+        return constrain((v - min) / (max - min), 0, 1);
+    }
+
+    static float constrain(float val, float min, float max) {
+        if (val < min) {
+            return min;
+        } else if (val > max) {
+            return max;
+        } else {
+            return val;
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItemId = getArguments().getLong(ARG_ITEM_ID);
         }
@@ -104,7 +114,7 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
 
         mPhotoView = mRootView.findViewById(R.id.photo);
@@ -138,21 +148,6 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
                     (int) (Color.blue(mMutedColor) * 0.9));
         }
         mStatusBarColorDrawable.setColor(color);
-//        mDrawInsetsFrameLayout.setInsetBackground(mStatusBarColorDrawable);
-    }
-
-    static float progress(float v, float min, float max) {
-        return constrain((v - min) / (max - min), 0, 1);
-    }
-
-    static float constrain(float val, float min, float max) {
-        if (val < min) {
-            return min;
-        } else if (val > max) {
-            return max;
-        } else {
-            return val;
-        }
     }
 
     private Date parsePublishedDate() {
@@ -178,7 +173,6 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
 
 
         bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
-
         if (mCursor != null) {
             mRootView.setAlpha(0);
             mRootView.setVisibility(View.VISIBLE);
@@ -186,24 +180,22 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
             titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
             Date publishedDate = parsePublishedDate();
             if (!publishedDate.before(START_OF_EPOCH.getTime())) {
-                bylineView.setText(Html.fromHtml(
-                        DateUtils.getRelativeTimeSpanString(
-                                publishedDate.getTime(),
+                bylineView.setText(getString(R.string.article_published_author,
+                        DateUtils.getRelativeTimeSpanString(publishedDate.getTime(),
                                 System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
-                                DateUtils.FORMAT_ABBREV_ALL).toString()
-                                + " by <font color='#ffffff'>"
-                                + mCursor.getString(ArticleLoader.Query.AUTHOR)
-                                + "</font>"));
+                                DateUtils.FORMAT_ABBREV_ALL),
+                        mCursor.getString(ArticleLoader.Query.AUTHOR))
+                );
 
             } else {
                 // If date is before 1902, just show the string
-                bylineView.setText(Html.fromHtml(
-                        outputFormat.format(publishedDate) + " by <font color='#ffffff'>"
-                        + mCursor.getString(ArticleLoader.Query.AUTHOR)
-                                + "</font>"));
+                bylineView.setText(getString(R.string.article_published_author,
+                        outputFormat.format(publishedDate),
+                        mCursor.getString(ArticleLoader.Query.AUTHOR)));
 
             }
-            bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
+            bodyView.setText(mCursor.getString(ArticleLoader.Query.BODY));
+
             ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
                     .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
                         @Override
@@ -227,7 +219,7 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
         } else {
             mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
-            bylineView.setText("N/A" );
+            bylineView.setText("N/A");
             bodyView.setText("N/A");
         }
     }
@@ -259,6 +251,5 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
     @Override
     public void onLoaderReset(android.support.v4.content.Loader<Cursor> cursorLoader) {
         mCursor = null;
-        bindViews();
     }
 }

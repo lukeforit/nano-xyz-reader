@@ -33,7 +33,6 @@
                 android:id="@+id/meta_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
                 android:background="#333"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/detail_metabar_vert_padding"
@@ -78,7 +77,6 @@
             android:layout_gravity="center_horizontal"
             android:background="#fff"
             android:elevation="2dp"
-            android:maxWidth="@dimen/detail_card_max_width"
             android:orientation="vertical">
 
             <TextView

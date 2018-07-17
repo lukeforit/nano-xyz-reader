@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.xyzreader.R;
@@ -63,6 +64,16 @@ public class ArticleDetailActivity extends AppCompatActivity
                 mStartId = ItemsContract.Items.getItemId(getIntent().getData());
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

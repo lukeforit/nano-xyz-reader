@@ -9,10 +9,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -128,6 +130,9 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
                         .getIntent(), getString(R.string.action_share)));
             }
         });
+
+        getActivityCast().setSupportActionBar((Toolbar) mRootView.findViewById(R.id.toolbar));
+        getActivityCast().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         bindViews();
         updateStatusBar();

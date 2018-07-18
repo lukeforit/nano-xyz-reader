@@ -7,7 +7,8 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:elevation="4dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_content_ctl"
@@ -20,7 +21,7 @@
                 android:id="@+id/photo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop" />
         </android.support.design.widget.CollapsingToolbarLayout>
 
         <android.support.v7.widget.Toolbar
@@ -102,13 +103,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:backgroundTint="@color/theme_accent"
+        android:layout_marginEnd="@dimen/fab_margin"
         android:contentDescription="@string/action_share"
         android:elevation="@dimen/fab_elevation"
         android:src="@drawable/ic_share"
-        app:pressedTranslationZ="@dimen/fab_elevation"
+        app:backgroundTint="@color/theme_accent"
         app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end" />
+        app:layout_anchorGravity="bottom|end"
+        app:pressedTranslationZ="@dimen/fab_elevation" />
 
 </android.support.design.widget.CoordinatorLayout>

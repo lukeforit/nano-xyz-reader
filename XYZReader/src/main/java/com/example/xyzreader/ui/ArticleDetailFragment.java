@@ -27,6 +27,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * A fragment representing a single Article detail screen. This fragment is
  * either contained in a {@link ArticleListActivity} in two-pane mode (on
@@ -43,9 +46,19 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
     private ColorDrawable mStatusBarColorDrawable;
 
     private int mTopInset;
-    private ImageView mPhotoView;
+
+    @BindView(R.id.photo)
+    ImageView mPhotoView;
+
     private int mScrollY;
     private int mStatusBarFullOpacityBottom;
+
+    @BindView(R.id.article_title)
+    TextView titleView;
+    @BindView(R.id.article_byline)
+    TextView bylineView;
+    @BindView(R.id.article_body)
+    TextView bodyView;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
     // Use default locale format
@@ -114,7 +127,7 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
 
-        mPhotoView = mRootView.findViewById(R.id.photo);
+        ButterKnife.bind(this, mRootView);
 
         mStatusBarColorDrawable = new ColorDrawable(0);
 
@@ -165,12 +178,7 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
         if (mRootView == null) {
             return;
         }
-
-        TextView titleView = (TextView) mRootView.findViewById(R.id.article_title);
-        TextView bylineView = (TextView) mRootView.findViewById(R.id.article_byline);
         bylineView.setMovementMethod(new LinkMovementMethod());
-        TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
-
 
         bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
         if (mCursor != null) {
@@ -200,27 +208,13 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
                     .load(mCursor.getString(ArticleLoader.Query.PHOTO_URL))
                     .apply(new RequestOptions().fitCenter())
                     .into(mPhotoView);
-
-//            ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
-//                    .get(, new ImageLoader.ImageListener() {
-//                        @Override
-//                        public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
-//                            Bitmap bitmap = imageContainer.getBitmap();
-//                            if (bitmap != null) {
+            //TODO change colors based on Palette
 //                                Palette p = Palette.generate(bitmap, 12);
 //                                mMutedColor = p.getDarkMutedColor(0xFF333333);
 //                                mPhotoView.setImageBitmap(imageContainer.getBitmap());
 //                                mRootView.findViewById(R.id.meta_bar)
 //                                        .setBackgroundColor(mMutedColor);
 //                                updateStatusBar();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onErrorResponse(VolleyError volleyError) {
-//
-//                        }
-//                    });
         } else {
             mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
